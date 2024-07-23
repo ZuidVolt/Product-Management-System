@@ -3,7 +3,7 @@
 .PHONY: mypy unittest pytest run format pylint ruff coverage install install_utility uninstall clean check full docs venv requirements freeze update_deps security_check build docker_build docker_run
 
 mypy: # check for type errors
-	mypy --check-untyped-defs utils.py tests.py user_management.py product_management.py order_management.py main.py inventory_management.py database.py
+	mypy --check-untyped-defs utils.py  user_management.py product_management.py order_management.py main.py inventory_management.py database.py test_full.py
 unittest: # runs unit tests on all files starting with test_
 	python3 -m unittest discover -v -p "test_*.py"
 
@@ -14,10 +14,10 @@ run: # runs program from main
 	python3 main.py
 
 format: # formats using black
-	ruff format --line-length 120 utils.py tests.py user_management.py product_management.py order_management.py main.py inventory_management.py database.py
+	ruff format --line-length 120 utils.py  user_management.py product_management.py order_management.py main.py inventory_management.py database.py test_full.py
 
 pylint: # checks for errors and bad practices
-	pylint --disable=C0116,C0114,C0301,W0611,C0303,E0602,W0612,C0413,C0305,C0415 utils.py tests.py user_management.py product_management.py order_management.py main.py inventory_management.py database.py
+	pylint --disable=C0116,C0114,C0301,W0611,C0303,E0602,W0612,C0413,C0305,C0415 utils.py user_management.py product_management.py order_management.py main.py inventory_management.py database.py test_full.py
 
 ruff: # checks for errors and bad practices
 	ruff check --fix main.py .
@@ -47,7 +47,7 @@ clean: # cleans temporary files
 	rm -rf *.dSYM
 
 # combined commands
-check: format mypy ruff unittest # does a quick check of code using linting, formatting, type checking, and unit testing
+check: format mypy ruff clean # does a quick check of code using linting, formatting, type checking, and unit testing
 
 full: format mypy pytest ruff pylint # does a full check of code using linting, formatting, type checking, and unit testing
 
