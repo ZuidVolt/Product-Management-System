@@ -47,7 +47,7 @@ clean: # cleans temporary files
 	rm -rf *.dSYM
 
 # combined commands
-check: format mypy ruff clean # does a quick check of code using linting, formatting, type checking, and unit testing
+check: format mypy ruff  # does a quick check of code using linting, formatting, type checking, and unit testing
 
 full: format mypy pytest ruff pylint # does a full check of code using linting, formatting, type checking, and unit testing
 
