@@ -1,5 +1,7 @@
 venv/
 .vscode
-.mypy_cache
+.mypy_cache/
 .DS_store
-
+.ruff_cache/
+.pytest_cache/
+__pycache__/
