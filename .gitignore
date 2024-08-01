@@ -1,11 +1,14 @@
-venv/
+# files
 .vscode
-.mypy_cache/
 .DS_store
+Makefile
+.Makefile
+makefile
+
+# folders
+venv/
+.mypy_cache/
 .ruff_cache/
 .pytest_cache/
 __pycache__/
 .ruff_cache/
-Makefile
-.Makefile
-makefile
