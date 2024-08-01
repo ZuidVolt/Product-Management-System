@@ -1,9 +1,0 @@
-[
-    {
-        "product_id": 1,
-        "name": "test",
-        "price": 300.0,
-        "description": "a test",
-        "quantity": 1
-    }
-]
