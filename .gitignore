@@ -1,15 +1,38 @@
-# files
-.vscode
-.DS_store
+# Ignore operating system files
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Ignore IDE and editor files
+.vscode/
+.idea/
+.sublime-text
+.atom/
+# Ignore build and compilation files
 Makefile
-.Makefile
 makefile
+*.o
+*.obj
+*.exe
+*.dll
+*.so
+
+# Ignore Python files
+*.pyc
+*.pyo
+*.pyd
+__pycache__/
+.mypy_cache/
+.pytest_cache/
+
+# Ignore virtual environment files
+venv/
+# Ignore data files
 products.json
 
-# folders
-venv/
-.mypy_cache/
-.ruff_cache/
-.pytest_cache/
-__pycache__/
-.ruff_cache/
+# Ignore other files
+*.log
+*.tmp
+*.bak
+*.swp
