@@ -1,4 +1,5 @@
 import json
+import pathlib
 
 
 class ProductManager:
@@ -10,12 +11,14 @@ class ProductManager:
         self._load_json_file(file_name)
 
     def _save_to_json_file(self, file_name: str):
-        with open(file_name, "w") as file:
+        file_path = pathlib.Path(file_name)
+        with file_path.open("w") as file:
             json.dump(self.products, file)
 
     def _load_json_file(self, file_name):
+        file_path = pathlib.Path(file_name)
         try:
-            with open(file_name, "r") as file:
+            with file_path.open() as file:
                 self.products = json.load(file)
         except (FileNotFoundError, json.JSONDecodeError):
             self.products = []

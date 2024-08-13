@@ -1,8 +1,9 @@
 import unittest
-import os
 from typing import List, Dict, Any
 from unittest.mock import patch
 from io import StringIO
+from typing import ClassVar
+import pathlib
 
 # modules under test
 from product_management import ProductManager
@@ -11,7 +12,7 @@ from product_management import ProductManager
 class TestProductManager(unittest.TestCase):
     TEST_FILE = "test_products.json"
 
-    product_data: List[Dict[str, Any]] = [
+    product_data: ClassVar[List[Dict[str, Any]]] = [
         {"product_id": 1, "name": "Apple", "price": 10.99, "description": "Fresh apple", "quantity": 50},
         {"product_id": 2, "name": "Banana", "price": 5.99, "description": "Yellow banana", "quantity": 100},
         {"product_id": 3, "name": "Cherry", "price": 20.99, "description": "Red cherry", "quantity": 30},
@@ -21,8 +22,9 @@ class TestProductManager(unittest.TestCase):
         self.pm = ProductManager(self.TEST_FILE)
 
     def tearDown(self):
-        if os.path.exists(self.TEST_FILE):
-            os.remove(self.TEST_FILE)
+        test_file_path = pathlib.Path(self.TEST_FILE)
+        if test_file_path.exists():
+            test_file_path.unlink()
 
     def test_init(self):
         self.assertEqual(self.pm.file_name, self.TEST_FILE)
@@ -76,13 +78,15 @@ class TestProductManager(unittest.TestCase):
             ("Grape", ""),  # No result
         ]
 
+        # Corrected version:
         for search_input, expected_output in test_cases:
-            with self.subTest(search_input=search_input):
-                with patch("builtins.input", return_value=search_input), patch(
-                    "sys.stdout", new=StringIO()
-                ) as fake_out:
-                    self.pm.search_product()
-                    self.assertIn(expected_output, fake_out.getvalue())
+            with (
+                self.subTest(search_input=search_input),
+                patch("builtins.input", return_value=search_input),
+                patch("sys.stdout", new=StringIO()) as fake_out,
+            ):
+                self.pm.search_product()
+                self.assertIn(expected_output, fake_out.getvalue())
 
 
 class TestUserManager(unittest.TestCase):
