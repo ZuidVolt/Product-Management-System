@@ -9,6 +9,7 @@ Desktop.ini
 .idea/
 .sublime-text
 .atom/
+
 # Ignore build and compilation files
 Makefile
 makefile
@@ -29,6 +30,7 @@ __pycache__/
 
 # Ignore virtual environment files
 venv/
+
 # Ignore data files
 products.json
 
