@@ -76,21 +76,58 @@ class ProductManager:
 
 
 ### ============== testing main script ============== ###
+MENU_OPTIONS = {
+    "1": "Add product",
+    "2": "Remove product",
+    "3": "Update product",
+    "4": "Sort products by price or name",
+    "5": "Search for a product",
+    "6": "Exit",
+}
+
+
 def display_menu() -> None:
     """Display the product manager menu."""
     print("\nProduct Manager Menu:")
     print("------------------------")
-    print("1. Add product")
-    print("2. Remove product")
-    print("3. Update product")
-    print("4. Sort products by price or name")
-    print("5. Search for a product")
-    print("6. Exit")
+    for option, description in MENU_OPTIONS.items():
+        print(f"{option}. {description}")
 
 
 def get_user_choice() -> Optional[str]:
     """Get the user's choice from the menu."""
-    return input("Enter your choice (or 'q' to quit): ").strip().lower()
+    while True:
+        choice = input("Enter your choice (or 'q' to quit): ").strip().lower()
+        if choice in MENU_OPTIONS or choice == "q":
+            return choice
+        print("Invalid choice. Please try again.")
+
+
+def validate_product_id(product_manager: ProductManager, product_id: int) -> bool:
+    """Check if the product ID exists in the product manager."""
+    return any(product["product_id"] == product_id for product in product_manager.products)
+
+
+def handle_remove_product(product_manager: ProductManager) -> None:
+    try:
+        product_id = int(input("Enter the product ID to remove: "))
+        if validate_product_id(product_manager, product_id):
+            product_manager.remove_product(product_id)
+        else:
+            print("Product ID not found.")
+    except ValueError:
+        print("Invalid product ID. Please enter an integer.")
+
+
+def handle_update_product(product_manager: ProductManager) -> None:
+    try:
+        product_id = int(input("Enter the product ID to update: "))
+        if validate_product_id(product_manager, product_id):
+            product_manager.update_product(product_id)
+        else:
+            print("Product ID not found.")
+    except ValueError:
+        print("Invalid product ID. Please enter an integer.")
 
 
 def handle_user_choice(product_manager: ProductManager, choice: str) -> None:
@@ -99,17 +136,9 @@ def handle_user_choice(product_manager: ProductManager, choice: str) -> None:
         case "1":
             product_manager.add_product()
         case "2":
-            try:
-                product_id = int(input("Enter the product ID to remove: "))
-                product_manager.remove_product(product_id)
-            except ValueError:
-                print("Invalid product ID. Please enter an integer.")
+            handle_remove_product(product_manager)
         case "3":
-            try:
-                product_id = int(input("Enter the product ID to update: "))
-                product_manager.update_product(product_id)
-            except ValueError:
-                print("Invalid product ID. Please enter an integer.")
+            handle_update_product(product_manager)
         case "4":
             product_manager.sort_products()
         case "5":
@@ -127,10 +156,8 @@ def main() -> None:
     while True:
         display_menu()
         choice = get_user_choice()
-        if choice is None:
-            print("Invalid input. Please try again.")
-            continue
-        handle_user_choice(product_manager, choice)
+        if choice is not None:
+            handle_user_choice(product_manager, choice)
         if choice in ["6", "q"]:
             break
 
