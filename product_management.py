@@ -143,7 +143,9 @@ def handle_user_choice(product_manager: ProductManager, choice: str) -> None:
             product_manager.sort_products()
         case "5":
             product_manager.search_product()
-        case "6", "q":
+        case "6":
+            pass
+        case "q":
             pass
         case _:
             print("Invalid choice. Please try again.")
