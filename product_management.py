@@ -1,6 +1,8 @@
 import json
 import pathlib
 
+from typing import Optional
+
 
 class ProductManager:
     """A class used to manage products."""
@@ -73,34 +75,65 @@ class ProductManager:
         print(result)
 
 
-if __name__ == "__main__":
+### ============== testing main script ============== ###
+def display_menu() -> None:
+    """Display the product manager menu."""
+    print("\nProduct Manager Menu:")
+    print("------------------------")
+    print("1. Add product")
+    print("2. Remove product")
+    print("3. Update product")
+    print("4. Sort products by price or name")
+    print("5. Search for a product")
+    print("6. Exit")
+
+
+def get_user_choice() -> Optional[str]:
+    """Get the user's choice from the menu."""
+    return input("Enter your choice (or 'q' to quit): ").strip().lower()
+
+
+def handle_user_choice(product_manager: ProductManager, choice: str) -> None:
+    """Handle the user's choice."""
+    match choice:
+        case "1":
+            product_manager.add_product()
+        case "2":
+            try:
+                product_id = int(input("Enter the product ID to remove: "))
+                product_manager.remove_product(product_id)
+            except ValueError:
+                print("Invalid product ID. Please enter an integer.")
+        case "3":
+            try:
+                product_id = int(input("Enter the product ID to update: "))
+                product_manager.update_product(product_id)
+            except ValueError:
+                print("Invalid product ID. Please enter an integer.")
+        case "4":
+            product_manager.sort_products()
+        case "5":
+            product_manager.search_product()
+        case "6", "q":
+            pass
+        case _:
+            print("Invalid choice. Please try again.")
+
+
+def main() -> None:
+    """The main function that runs the product manager application."""
     product_manager = ProductManager()
 
     while True:
-        print("\nProduct Manager Menu:")
-        print("------------------------")
-        print("1. Add product")
-        print("2. Remove product")
-        print("3. Update product")
-        print("4. Sort products by price or name")
-        print("5. Search for a product")
-        print("6. Exit")
-
-        choice = input("Enter your choice: ")
-
-        if choice == "1":
-            product_manager.add_product()
-        elif choice == "2":
-            product_id = int(input("Enter the product ID to remove: "))
-            product_manager.remove_product(product_id)
-        elif choice == "3":
-            product_id = int(input("Enter the product ID to update: "))
-            product_manager.update_product(product_id)
-        elif choice == "4":
-            product_manager.sort_products()
-        elif choice == "5":
-            product_manager.search_product()
-        elif choice == "6":
+        display_menu()
+        choice = get_user_choice()
+        if choice is None:
+            print("Invalid input. Please try again.")
+            continue
+        handle_user_choice(product_manager, choice)
+        if choice in ["6", "q"]:
             break
-        else:
-            print("Invalid choice. Please try again.")
+
+
+if __name__ == "__main__":
+    main()
