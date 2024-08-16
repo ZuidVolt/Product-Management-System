@@ -2,7 +2,6 @@ import json
 import pathlib
 import tkinter as tk
 from tkinter import messagebox, simpledialog
-from typing import Optional
 
 
 class ProductManager:
@@ -68,19 +67,23 @@ class ProductManager:
         messagebox.showinfo("Success", "Product updated successfully!")
 
     def sort_products(self):
-        order = simpledialog.askstring("Sort", "Do you want to sort by price (p) or name (n)?").lower()
-        if order == "p":
-            self.products.sort(key=lambda x: x["price"])
-        elif order == "n":
-            self.products.sort(key=lambda x: x["name"])
+        order = simpledialog.askstring("Sort", "Do you want to sort by price (p) or name (n)?")
+        if order is not None:
+            order = order.lower()
+            if order == "p":
+                self.products.sort(key=lambda x: x["price"])
+            elif order == "n":
+                self.products.sort(key=lambda x: x["name"])
         messagebox.showinfo("Success", f"Products sorted by {'price' if order == 'p' else 'name'}.")
 
     def search_product(self):
         query = simpledialog.askstring("Search", "Enter the product ID or name to search:")
+        if query is not None:
+            query = query.lower()
         result = [
             product
             for product in self.products
-            if str(product["product_id"]) == query or product["name"].lower() == query.lower()
+            if str(product["product_id"]) == query or product["name"].lower() == query
         ]
         if result:
             messagebox.showinfo("Search Result", f"Found products: {result}")
@@ -110,7 +113,7 @@ def handle_update_product(product_manager: ProductManager):
             messagebox.showwarning("Error", "Product ID not found.")
 
 
-def handle_user_choice(product_manager: ProductManager, choice: str):
+def handle_user_choice(product_manager: ProductManager, choice: str, root: tk.Tk):
     if choice == "1":
         product_manager.add_product()
     elif choice == "2":
@@ -126,24 +129,52 @@ def handle_user_choice(product_manager: ProductManager, choice: str):
 
 
 def main():
-    global root
     product_manager = ProductManager()
 
     root = tk.Tk()
     root.title("Product Manager")
 
     # Menu options
-    tk.Label(root, text="Product Manager Menu", font=("Arial", 14)).pack(pady=10)
-    tk.Button(root, text="1. Add product", command=lambda: handle_user_choice(product_manager, "1")).pack(fill="x")
-    tk.Button(root, text="2. Remove product", command=lambda: handle_user_choice(product_manager, "2")).pack(fill="x")
-    tk.Button(root, text="3. Update product", command=lambda: handle_user_choice(product_manager, "3")).pack(fill="x")
+    menu_label = tk.Label(root, text="Product Manager Menu", font=("Arial", 14))
+    menu_label.pack(pady=10)
+
+    button_frame = tk.Frame(root)
+    button_frame.pack(fill="both", expand=True)
     tk.Button(
-        root, text="4. Sort products by price or name", command=lambda: handle_user_choice(product_manager, "4")
+        button_frame,
+        text="1. Add product",
+        command=lambda: handle_user_choice(product_manager, "1", root),
     ).pack(fill="x")
-    tk.Button(root, text="5. Search for a product", command=lambda: handle_user_choice(product_manager, "5")).pack(
-        fill="x"
-    )
-    tk.Button(root, text="6. Exit", command=lambda: handle_user_choice(product_manager, "6")).pack(fill="x")
+
+    tk.Button(
+        button_frame,
+        text="2. Remove product",
+        command=lambda: handle_user_choice(product_manager, "2", root),
+    ).pack(fill="x")
+
+    tk.Button(
+        button_frame,
+        text="3. Update product",
+        command=lambda: handle_user_choice(product_manager, "3", root),
+    ).pack(fill="x")
+
+    tk.Button(
+        button_frame,
+        text="4. Sort products by price or name",
+        command=lambda: handle_user_choice(product_manager, "4", root),
+    ).pack(fill="x")
+
+    tk.Button(
+        button_frame,
+        text="5. Search for a product",
+        command=lambda: handle_user_choice(product_manager, "5", root),
+    ).pack(fill="x")
+
+    tk.Button(
+        button_frame,
+        text="6. Exit",
+        command=lambda: handle_user_choice(product_manager, "6", root),
+    ).pack(fill="x")
 
     root.mainloop()
 
